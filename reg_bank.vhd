@@ -39,17 +39,20 @@ architecture rtl of reg_bank is
     signal reg_we_array : std_logic_vector(REG_COUNT-1 downto 0);
 
 begin
-
     -- dekoder zapisu
     process(we, write_addr)
     begin
         reg_we_array <= (others => '0'); 
+        -- Sprawdzamy, czy wszystkie bity adresu s? ustalone
         if we = '1' then
-            reg_we_array(to_integer(unsigned(write_addr))) <= '1';
+            if write_addr(0) /= 'U' and write_addr(1) /= 'U' and 
+               write_addr(2) /= 'U' and write_addr(3) /= 'U' then
+                reg_we_array(to_integer(unsigned(write_addr))) <= '1';
+            end if;
         end if;
     end process;
 
-    GEN_REGS: for i in 0 to REG_COUNT-1 generate
+GEN_REGS: for i in 0 to REG_COUNT-1 generate
         REG_INST: reg_n
             generic map (
                 N => DATA_WIDTH

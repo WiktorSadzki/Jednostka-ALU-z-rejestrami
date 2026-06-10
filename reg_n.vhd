@@ -13,14 +13,17 @@ entity reg_n is
     );
 end entity reg_n;
 
-architecture rtl of reg_n is
+architecture rtl of reg_n is 
+    signal temp_q : std_logic_vector(N-1 downto 0) := (others => '0');
 begin
     process(clk)
     begin
         if rising_edge(clk) then
             if en = '1' then
-                q <= d;
+                temp_q <= d;
             end if;
         end if;
     end process;
+
+    q <= temp_q;
 end architecture rtl;
